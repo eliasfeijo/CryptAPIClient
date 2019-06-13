@@ -20,18 +20,20 @@ class App extends React.Component {
     
     this.state = {
       data: [],
-      currencies: currencies,
       selectedCurrency: currencies[0]
     };
   }
 
   componentDidMount() {
-    axios.get(url)
+    this.updateCryptoCoinList(this.state.selectedCurrency);
+  }
+
+  updateCryptoCoinList (currency) {
+    axios.put(url, { currency: currency.key })
     .then(response => {
       this.setState({
         data: response.data.data,
-        currencies: this.state.currencies,
-        selectedCurrency: this.state.selectedCurrency
+        selectedCurrency: currency
       });
     })
     .catch(error => {
@@ -46,21 +48,20 @@ class App extends React.Component {
           <Text>Crypt API Client</Text>
         </View>
         <SelectCurrency
-          options={this.state.currencies}
+          options={currencies}
           setSelectedOption={this.setSelectedCurrency}
           selectedOption={this.state.selectedCurrency}
         />
-        <ListCryptoCoin data={this.state.data} />
+        <ListCryptoCoin 
+          data={this.state.data}
+          selectedCurrency={this.state.selectedCurrency}
+        />
       </View>
     );
   }
 
   setSelectedCurrency = (selectedCurrency) => {
-    this.setState({
-      data: this.state.data,
-      currencies: this.state.currencies,
-      selectedCurrency: selectedCurrency
-    });
+    this.updateCryptoCoinList(selectedCurrency);
   }
 }
 

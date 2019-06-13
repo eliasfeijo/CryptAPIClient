@@ -11,7 +11,9 @@ class ListCryptoCoin extends React.Component {
           renderItem={({item}) => {
             return(
               <View style={styles.item}>
-                <Text>{item.title}: {item.price}</Text>
+                <Text>
+                  {item.title}: {this.props.selectedCurrency.symbol} {Number(item.price).toFixed(2)}
+                </Text>
               </View>
             );
           }}
