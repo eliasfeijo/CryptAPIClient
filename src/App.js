@@ -1,6 +1,6 @@
 import { registerRootComponent } from 'expo';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import ListCryptoCoin from './components/ListCryptoCoin/ListCryptoCoin';
 import axios from 'axios';
 import Constants from 'expo-constants';
@@ -24,7 +24,7 @@ class App extends React.Component {
       });
     })
     .catch(error => {
-      console.log("Error: ", error);
+      Alert.alert("Failed to connect to Crypt API");
     });
   }
 
