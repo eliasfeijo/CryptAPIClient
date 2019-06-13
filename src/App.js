@@ -1,33 +1,40 @@
 import { registerRootComponent } from 'expo';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ListCrypoCoin from './components/ListCryptoCoin/ListCryptoCoin'
+import ListCryptoCoin from './components/ListCryptoCoin/ListCryptoCoin';
+import axios from 'axios';
+import Constants from 'expo-constants';
+
+const { manifest } = Constants;
+const url = `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}/api/v1/crypto_coins`;
 
 class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
-      data: [
-        {id: 1, title: 'Bitcoin', price: 32000.321},
-        {id: 2, title: 'Ethereum', price: 1000.123},
-        {id: 3, title: 'AnotherCoin', price: 4.321},
-        {id: 4, title: 'AnotherCoin', price: 4.321},
-        {id: 5, title: 'AnotherCoin', price: 4.321},
-        {id: 6, title: 'AnotherCoin', price: 4.321},
-        {id: 7, title: 'AnotherCoin', price: 4.321},
-        {id: 8, title: 'AnotherCoin', price: 4.321},
-        {id: 9, title: 'AnotherCoin', price: 4.321},
-        {id: 10, title: 'AnotherCoin', price: 4.321},
-      ]
+      data: []
     }
   }
+
+  componentDidMount() {
+    axios.get(url)
+    .then(response => {
+      this.setState({
+        data: response.data.data
+      });
+    })
+    .catch(error => {
+      console.log("Error: ", error);
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text>Crypt API Client</Text>
         </View>
-        <ListCrypoCoin data={this.state.data} />
+        <ListCryptoCoin data={this.state.data} />
       </View>
     );
   }
