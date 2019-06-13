@@ -1,5 +1,6 @@
 import { registerRootComponent } from 'expo';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import ListCrypoCoin from './components/ListCryptoCoin/ListCryptoCoin'
 
 class App extends React.Component {
@@ -22,9 +23,25 @@ class App extends React.Component {
   }
   render() {
     return (
-      <ListCrypoCoin data={this.state.data} />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text>Crypt API Client</Text>
+        </View>
+        <ListCrypoCoin data={this.state.data} />
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    padding: 20,
+    alignItems: 'center'
+  }
+});
 
 registerRootComponent(App);
