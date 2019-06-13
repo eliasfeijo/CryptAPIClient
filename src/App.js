@@ -4,23 +4,34 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import ListCryptoCoin from './components/ListCryptoCoin/ListCryptoCoin';
 import axios from 'axios';
 import Constants from 'expo-constants';
+import SelectCurrency from './components/SelectCurrency/SelectCurrency';
 
 const { manifest } = Constants;
 const url = `http://${manifest.debuggerHost.split(`:`).shift().concat(`:3000`)}/api/v1/crypto_coins`;
 
+const currencies = [
+  {key: "BRL", name: "Real", symbol: "R$"},
+  {key: "USD", name: "Dólar", symbol: "$"},
+]
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      data: []
-    }
+      data: [],
+      currencies: currencies,
+      selectedCurrency: currencies[0]
+    };
   }
 
   componentDidMount() {
     axios.get(url)
     .then(response => {
       this.setState({
-        data: response.data.data
+        data: response.data.data,
+        currencies: this.state.currencies,
+        selectedCurrency: this.state.selectedCurrency
       });
     })
     .catch(error => {
@@ -34,9 +45,22 @@ class App extends React.Component {
         <View style={styles.header}>
           <Text>Crypt API Client</Text>
         </View>
+        <SelectCurrency
+          options={this.state.currencies}
+          setSelectedOption={this.setSelectedCurrency}
+          selectedOption={this.state.selectedCurrency}
+        />
         <ListCryptoCoin data={this.state.data} />
       </View>
     );
+  }
+
+  setSelectedCurrency = (selectedCurrency) => {
+    this.setState({
+      data: this.state.data,
+      currencies: this.state.currencies,
+      selectedCurrency: selectedCurrency
+    });
   }
 }
 
